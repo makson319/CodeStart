@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CodeStart помогает начать изучать программирование через практику, небольшие проекты и понятный маршрут обучения.">
+  <meta name="theme-color" content="#0b1020">
+  <title>CodeStart - начни создавать с помощью кода</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --surface: #121a2d;
+      --surface-2: #182238;
+      --text: #f4f7ff;
+      --muted: #aab5ca;
+      --line: rgba(255,255,255,.11);
+      --violet: #9a7bff;
+      --cyan: #62ead5;
+      --lime: #d2ff72;
+      --radius: 22px;
+      --max: 1160px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 82% 6%, rgba(154,123,255,.16), transparent 28rem),
+        radial-gradient(circle at 4% 28%, rgba(98,234,213,.08), transparent 24rem),
+        var(--bg);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+    button, a, input, select { -webkit-tap-highlight-color: transparent; }
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid var(--cyan);
+      outline-offset: 3px;
+    }
+    .container { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
+    .site-header {
+      position: sticky; top: 0; z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(11,16,32,.84);
+      backdrop-filter: blur(18px);
+    }
+    .nav { min-height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: inline-flex; align-items: center; gap: 11px; font-size: 1.1rem; font-weight: 800; letter-spacing: -.04em; }
+    .brand-mark {
+      display: grid; place-items: center; width: 38px; height: 38px;
+      border-radius: 12px; color: #0b1020; background: var(--lime);
+      font-weight: 900; font-size: 1rem;
+    }
+    .nav-links { display: flex; align-items: center; gap: 26px; color: var(--muted); font-size: .92rem; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+    .menu-toggle { display: none; border: 1px solid var(--line); background: var(--surface); color: var(--text); border-radius: 12px; padding: 9px 12px; cursor: pointer; }
+    .button {
+      display: inline-flex; justify-content: center; align-items: center; gap: 9px;
+      min-height: 48px; padding: 12px 19px; border: 1px solid transparent;
+      border-radius: 14px; font-weight: 750; cursor: pointer; transition: transform .2s, background .2s, border-color .2s;
+    }
+    .button:hover { transform: translateY(-2px); }
+    .button-primary { color: #0b1020; background: var(--lime); }
+    .button-primary:hover { background: #e0ff9b; }
+    .button-secondary { color: var(--text); border-color: var(--line); background: rgba(255,255,255,.035); }
+    .button-secondary:hover { border-color: rgba(98,234,213,.6); background: rgba(98,234,213,.06); }
+    .eyebrow { display: inline-flex; align-items: center; gap: 9px; color: var(--cyan); font-size: .78rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 24px; height: 2px; background: currentColor; }
+    .hero { padding: 82px 0 70px; overflow: hidden; }
+    .hero-grid { display: grid; grid-template-columns: 1.08fr .92fr; align-items: center; gap: 56px; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin: 20px 0; max-width: 720px; font-size: clamp(2.8rem, 6vw, 5.4rem); line-height: .99; letter-spacing: -.075em; }
+    h1 span { color: var(--lime); }
+    .hero-copy { max-width: 590px; color: var(--muted); font-size: 1.08rem; }
+    .hero-buttons { display: flex; flex-wrap: wrap; gap: 12px; margin: 29px 0 33px; }
+    .hero-note { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: .88rem; }
+    .note-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 0 5px rgba(98,234,213,.12); }
+    .hero-visual { position: relative; min-width: 0; }
+    .glow { position: absolute; width: 260px; height: 260px; right: 5%; top: 8%; border-radius: 50%; background: rgba(154,123,255,.25); filter: blur(65px); }
+    .code-window { position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,.14); border-radius: 24px; background: rgba(18,26,45,.92); box-shadow: 0 30px 90px rgba(0,0,0,.28); transform: rotate(1.2deg); }
+    .window-bar { display: flex; align-items: center; gap: 7px; padding: 15px 18px; border-bottom: 1px solid var(--line); }
+    .window-dot { width: 9px; height: 9px; border-radius: 50%; background: #526078; }
+    .window-title { margin-left: auto; color: #7786a0; font-size: .72rem; }
+    .code-content { padding: 25px 25px 28px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: clamp(.72rem, 1.1vw, .9rem); line-height: 2; }
+    .code-line { display: block; white-space: nowrap; }
+    .code-muted { color: #6f7e9a; }
+    .code-purple { color: #c2a7ff; }
+    .code-cyan { color: #73e8d7; }
+    .code-lime { color: #d2ff72; }
+    .code-orange { color: #ffbd86; }
+    .floating-card { position: absolute; right: -18px; bottom: -23px; display: flex; align-items: center; gap: 12px; max-width: 245px; padding: 15px 17px; border: 1px solid rgba(255,255,255,.13); border-radius: 17px; background: #1a2540; box-shadow: 0 16px 45px rgba(0,0,0,.25); }
+    .floating-icon { display: grid; place-items: center; flex: 0 0 40px; height: 40px; border-radius: 12px; color: #0b1020; background: var(--cyan); font-weight: 900; }
+    .floating-card strong { display: block; font-size: .86rem; }
+    .floating-card span { display: block; color: var(--muted); font-size: .75rem; }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 40px; max-width: 520px; }
+    .stat { padding-left: 15px; border-left: 2px solid rgba(210,255,114,.55); }
+    .stat strong { display: block; font-size: 1.35rem; line-height: 1.2; letter-spacing: -.04em; }
+    .stat span { color: var(--muted); font-size: .78rem; }
+    section.content-section { padding: 82px 0; border-top: 1px solid var(--line); }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 30px; margin-bottom: 35px; }
+    .section-head h2 { max-width: 650px; margin: 13px 0 0; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.08; letter-spacing: -.06em; }
+    .section-head p { max-width: 420px; margin: 0; color: var(--muted); }
+    .feature-grid, .track-grid, .project-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 17px; }
+    .card { padding: 25px; border: 1px solid var(--line); border-radius: var(--radius); background: linear-gradient(145deg, rgba(255,255,255,.045), rgba(255,255,255,.018)); }
+    .card-icon { display: grid; place-items: center; width: 47px; height: 47px; margin-bottom: 20px; border-radius: 15px; color: var(--cyan); background: rgba(98,234,213,.1); font-weight: 900; font-size: 1.05rem; }
+    .card h3 { margin-bottom: 10px; font-size: 1.13rem; letter-spacing: -.025em; }
+    .card p { margin-bottom: 0; color: var(--muted); font-size: .93rem; }
+    .track-card { position: relative; overflow: hidden; min-height: 245px; }
+    .track-card::after { content: ""; position: absolute; width: 130px; height: 130px; right: -42px; bottom: -42px; border-radius: 50%; background: var(--accent, rgba(154,123,255,.25)); filter: blur(25px); }
+    .track-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 22px; }
+    .track-tag { padding: 5px 9px; border: 1px solid var(--line); border-radius: 100px; color: var(--muted); font-size: .72rem; }
+    .track-card h3 { font-size: 1.35rem; }
+    .track-card ul { position: relative; z-index: 1; padding-left: 18px; color: var(--muted); font-size: .88rem; }
+    .track-card li { margin: 5px 0; }
+    .split-panel { display: grid; grid-template-columns: .85fr 1.15fr; gap: 42px; align-items: center; padding: 34px; border: 1px solid var(--line); border-radius: 28px; background: linear-gradient(120deg, rgba(154,123,255,.11), rgba(98,234,213,.04)); }
+    .split-panel h2 { margin: 13px 0 17px; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.08; letter-spacing: -.06em; }
+    .split-panel p { color: var(--muted); }
+    .steps { display: grid; gap: 14px; }
+    .step { display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: start; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: rgba(11,16,32,.35); }
+    .step-number { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; color: var(--bg); background: var(--lime); font-weight: 900; }
+    .step strong { display: block; margin: 1px 0 4px; }
+    .step p { margin: 0; font-size: .87rem; }
+    .project-card { padding: 0; overflow: hidden; }
+    .project-art { display: grid; place-items: center; min-height: 150px; padding: 22px; background: linear-gradient(135deg, rgba(154,123,255,.26), rgba(98,234,213,.12)); }
+    .mini-browser { width: 100%; max-width: 230px; padding: 12px; border: 1px solid rgba(255,255,255,.24); border-radius: 12px; background: rgba(11,16,32,.8); }
+    .mini-line { height: 6px; margin: 8px 0; border-radius: 20px; background: rgba(255,255,255,.16); }
+    .mini-line.short { width: 52%; background: var(--lime); }
+    .mini-line.mid { width: 76%; }
+    .project-copy { padding: 21px; }
+    .project-type { color: var(--cyan); font-size: .73rem; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; }
+    .project-copy h3 { margin: 7px 0 8px; }
+    .project-copy p { color: var(--muted); font-size: .88rem; }
+    .project-copy p:last-child { margin-bottom: 0; }
+    .faq-list { display: grid; gap: 10px; max-width: 850px; margin: 0 auto; }
+    details { padding: 18px 21px; border: 1px solid var(--line); border-radius: 16px; background: rgba(255,255,255,.025); }
+    summary { display: flex; justify-content: space-between; gap: 20px; cursor: pointer; font-weight: 750; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; color: var(--cyan); font-size: 1.25rem; line-height: 1; }
+    details[open] summary::after { content: "-"; }
+    details p { margin: 13px 0 0; color: var(--muted); font-size: .93rem; }
+    .contact-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 44px; align-items: start; }
+    .contact-copy h2 { margin: 13px 0 16px; font-size: clamp(2rem, 4vw, 3.15rem); line-height: 1.08; letter-spacing: -.06em; }
+    .contact-copy p { color: var(--muted); }
+    .contact-points { display: grid; gap: 10px; margin-top: 25px; color: var(--muted); font-size: .9rem; }
+    .contact-points span::before { content: "✓"; margin-right: 10px; color: var(--lime); font-weight: 900; }
+    .form-card { padding: 27px; border: 1px solid var(--line); border-radius: 23px; background: var(--surface); }
+    .form-card h3 { margin-bottom: 6px; font-size: 1.25rem; }
+    .form-card > p { margin-bottom: 22px; color: var(--muted); font-size: .9rem; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .field { display: grid; gap: 7px; margin-bottom: 15px; }
+    .field.full { grid-column: 1 / -1; }
+    label { color: #dce4f3; font-size: .84rem; font-weight: 700; }
+    input, select { width: 100%; min-height: 46px; padding: 11px 13px; border: 1px solid rgba(255,255,255,.14); border-radius: 12px; color: var(--text); background: #0d1425; }
+    input::placeholder { color: #78849b; }
+    select option { color: var(--text); background: #0d1425; }
+    .form-card .button { width: 100%; }
+    .form-note { margin: 12px 0 0 !important; font-size: .76rem !important; }
+    .form-status { min-height: 1.4em; margin: 12px 0 0; color: var(--cyan); font-size: .88rem; }
+    .footer { padding: 28px 0; border-top: 1px solid var(--line); }
+    .footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 20px; color: var(--muted); font-size: .82rem; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 18px; }
+    .footer-links a:hover { color: var(--text); }
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 45px; }
+      .hero-visual { max-width: 620px; width: 100%; margin: 0 auto; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 16px; }
+      .split-panel, .contact-grid { grid-template-columns: 1fr; }
+      .split-panel { gap: 25px; }
+    }
+    @media (max-width: 760px) {
+      .container { width: min(var(--max), calc(100% - 30px)); }
+      .nav { min-height: 68px; flex-wrap: wrap; }
+      .menu-toggle { display: inline-flex; }
+      .nav-actions .button { display: none; }
+      .nav-links {
+        display: none; flex-direction: column; align-items: stretch; gap: 0;
+        width: 100%; padding: 8px 0 18px; order: 3;
+      }
+      .nav-links.is-open { display: flex; }
+      .nav-links a { padding: 12px 4px; border-bottom: 1px solid var(--line); }
+      .hero { padding: 62px 0 55px; }
+      .hero-grid { gap: 35px; }
+      .hero-buttons { align-items: stretch; flex-direction: column; max-width: 340px; }
+      .stats { gap: 8px; }
+      .stat { padding-left: 9px; }
+      .stat strong { font-size: 1.15rem; }
+      .feature-grid, .track-grid, .project-grid { grid-template-columns: 1fr; }
+      section.content-section { padding: 61px 0; }
+      .card { padding: 22px; }
+      .split-panel { padding: 23px; }
+      .floating-card { right: 7px; bottom: -17px; }
+      .form-grid { grid-template-columns: 1fr; gap: 0; }
+      .field.full { grid-column: auto; }
+      .footer-inner { align-items: flex-start; flex-direction: column; }
+    }
+    @media (max-width: 420px) {
+      .container { width: calc(100% - 24px); }
+      h1 { font-size: clamp(2.55rem, 13vw, 3.35rem); }
+      .code-content { padding: 18px 14px; font-size: .69rem; }
+      .window-title { display: none; }
+      .floating-card { position: relative; right: auto; bottom: auto; margin: 14px 0 0 auto; }
+      .stats { grid-template-columns: 1fr; gap: 13px; }
+      .stat { padding-left: 12px; }
+      .form-card { padding: 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="#home" aria-label="CodeStart - на главную">
+        <span class="brand-mark">&lt;/&gt;</span><span>code<span style="color:var(--lime)">start</span></span>
+      </a>
+      <nav class="nav-links" id="site-navigation" aria-label="Основная навигация">
+        <a href="#about">О платформе</a>
+        <a href="#tracks">Направления</a>
+        <a href="#projects">Проекты</a>
+        <a href="#faq">Вопросы</a>
+        <a href="#contacts">Контакты</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="button button-primary" href="#contacts">Начать бесплатно <span aria-hidden="true">↗</span></a>
+        <button class="menu-toggle" id="menu-toggle" type="button" aria-controls="site-navigation" aria-expanded="false">Меню ☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">Практика с первого шага</span>
+          <h1>Пиши код.<br>Создавай <span>будущее.</span></h1>
+          <p class="hero-copy">CodeStart помогает войти в программирование без лишней теории. Выбирай направление, решай небольшие задачи и собирай первые проекты в портфолио.</p>
+          <div class="hero-buttons">
+            <a class="button button-primary" href="#tracks">Выбрать направление <span aria-hidden="true">→</span></a>
+            <a class="button button-secondary" href="#projects">Посмотреть проекты</a>
+          </div>
+          <div class="hero-note"><span class="note-dot"></span><span>Понятный маршрут для тех, кто начинает с нуля</span></div>
+          <div class="stats" aria-label="Особенности обучения">
+            <div class="stat"><strong>3 шага</strong><span>от идеи к проекту</span></div>
+            <div class="stat"><strong>4 трека</strong><span>для старта</span></div>
+            <div class="stat"><strong>Практика</strong><span>в каждом модуле</span></div>
+          </div>
+        </div>
+        <div class="hero-visual" aria-label="Иллюстрация редактора кода">
+          <div class="glow"></div>
+          <div class="code-window">
+            <div class="window-bar"><span class="window-dot"></span><span class="window-dot"></span><span class="window-dot"></span><span class="window-title">first-project.html</span></div>
+            <div class="code-content" aria-hidden="true">
+              <span class="code-line"><span class="code-muted">01</span> <span class="code-purple">&lt;section</span> <span class="code-cyan">class</span>=<span class="code-orange">"future"</span><span class="code-purple">&gt;</span></span>
+              <span class="code-line"><span class="code-muted">02</span> &nbsp;&nbsp;<span class="code-purple">&lt;h1&gt;</span></span>
+              <span class="code-line"><span class="code-muted">03</span> &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-lime">Hello, world!</span></span>
+              <span class="code-line"><span class="code-muted">04</span> &nbsp;&nbsp;<span class="code-purple">&lt;/h1&gt;</span></span>
+              <span class="code-line"><span class="code-muted">05</span> &nbsp;&nbsp;<span class="code-purple">&lt;p&gt;</span>Мой первый проект<span class="code-purple">&lt;/p&gt;</span></span>
+              <span class="code-line"><span class="code-muted">06</span> <span class="code-purple">&lt;/section&gt;</span></span>
+              <span class="code-line">&nbsp;</span>
+              <span class="code-line"><span class="code-muted">07</span> <span class="code-cyan">const</span> <span class="code-lime">nextStep</span> = <span class="code-orange">"start"</span>;</span>
+              <span class="code-line"><span class="code-muted">08</span> <span class="code-purple">console</span>.log(nextStep);<span class="code-lime"> _</span></span>
+            </div>
+          </div>
+          <div class="floating-card"><div class="floating-icon">✓</div><div><strong>Учись через действие</strong><span>Небольшие задачи и видимый прогресс</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="about">
+      <div class="container">
+        <div class="section-head">
+          <div><span class="eyebrow">О платформе</span><h2>Меньше хаоса.<br>Больше понятных шагов.</h2></div>
+          <p>CodeStart - учебный проект о том, как превратить интерес к технологиям в системную практику и первые законченные работы.</p>
+        </div>
+        <div class="feature-grid">
+          <article class="card"><div class="card-icon">01</div><h3>Маршрут обучения</h3><p>Темы идут от простых к сложным, чтобы было понятно, что изучать дальше и зачем это нужно.</p></article>
+          <article class="card"><div class="card-icon">02</div><h3>Практические задачи</h3><p>Каждый блок связан с небольшим результатом: страницей, скриптом или полезным инструментом.</p></article>
+          <article class="card"><div class="card-icon">03</div><h3>Портфолио по пути</h3><p>Учебные проекты помогают закреплять материал и показывают, чему удалось научиться.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="tracks">
+      <div class="container">
+        <div class="section-head">
+          <div><span class="eyebrow">Направления</span><h2>Выбери, с чего<br>начнётся твой код.</h2></div>
+          <p>Можно начать с визуальной части сайта, перейти к логике или попробовать универсальный язык для автоматизации.</p>
+        </div>
+        <div class="track-grid">
+          <article class="card track-card" style="--accent:rgba(98,234,213,.3)">
+            <div class="track-top"><div class="card-icon">01</div><span class="track-tag">Веб-разработка</span></div>
+            <h3>HTML и CSS</h3><p>Создавай страницы, оформляй блоки и учись делать интерфейсы удобными.</p>
+            <ul><li>Структура страницы</li><li>Сетка и адаптивность</li><li>Основы доступности</li></ul>
+          </article>
+          <article class="card track-card" style="--accent:rgba(154,123,255,.34)">
+            <div class="track-top"><div class="card-icon">02</div><span class="track-tag">Интерактивность</span></div>
+            <h3>JavaScript</h3><p>Добавляй реакции на действия пользователя и оживляй интерфейсы.</p>
+            <ul><li>Переменные и функции</li><li>События и формы</li><li>Работа с DOM</li></ul>
+          </article>
+          <article class="card track-card" style="--accent:rgba(255,189,134,.28)">
+            <div class="track-top"><div class="card-icon">03</div><span class="track-tag">Автоматизация</span></div>
+            <h3>Python</h3><p>Пиши понятные программы, обрабатывай данные и автоматизируй рутинные действия.</p>
+            <ul><li>Базовый синтаксис</li><li>Коллекции и циклы</li><li>Небольшие скрипты</li></ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="method">
+      <div class="container">
+        <div class="split-panel">
+          <div><span class="eyebrow">Как это работает</span><h2>Путь от первого вопроса до готового проекта.</h2><p>Не нужно знать всё заранее. Важно двигаться последовательно, проверять результат и исправлять ошибки.</p><a class="button button-primary" href="#contacts">Составить маршрут <span aria-hidden="true">→</span></a></div>
+          <div class="steps">
+            <div class="step"><div class="step-number">1</div><div><strong>Выбираешь цель</strong><p>Определяешь направление и небольшой результат, которого хочешь достичь.</p></div></div>
+            <div class="step"><div class="step-number">2</div><div><strong>Практикуешься</strong><p>Пишешь код, запускаешь его и учишься находить причины ошибок.</p></div></div>
+            <div class="step"><div class="step-number">3</div><div><strong>Показываешь результат</strong><p>Сохраняешь проект, описываешь решение и понимаешь, что улучшить дальше.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="projects">
+      <div class="container">
+        <div class="section-head">
+          <div><span class="eyebrow">Примеры работ</span><h2>Теория становится понятнее, когда её видно.</h2></div>
+          <p>Ниже приведены демонстрационные идеи учебных проектов. Их можно использовать как ориентир для собственной практики.</p>
+        </div>
+        <div class="project-grid">
+          <article class="card project-card"><div class="project-art"><div class="mini-browser"><div class="mini-line short"></div><div class="mini-line"></div><div class="mini-line mid"></div><div class="mini-line"></div></div></div><div class="project-copy"><span class="project-type">HTML + CSS</span><h3>Лендинг продукта</h3><p>Структура страницы, карточки, кнопки и адаптация под экран смартфона.</p></div></article>
+          <article class="card project-card"><div class="project-art" style="background:linear-gradient(135deg,rgba(98,234,213,.2),rgba(210,255,114,.13))"><div class="mini-browser"><div class="mini-line mid"></div><div class="mini-line short"></div><div class="mini-line"></div><div class="mini-line short"></div></div></div><div class="project-copy"><span class="project-type">JavaScript</span><h3>Трекер привычек</h3><p>Интерактивный список, события, состояние элементов и простая логика.</p></div></article>
+          <article class="card project-card"><div class="project-art" style="background:linear-gradient(135deg,rgba(255,189,134,.18),rgba(154,123,255,.18))"><div class="mini-browser"><div class="mini-line short"></div><div class="mini-line mid"></div><div class="mini-line mid"></div><div class="mini-line"></div></div></div><div class="project-copy"><span class="project-type">Python</span><h3>Помощник для задач</h3><p>Небольшая программа для обработки информации и автоматизации действий.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="faq">
+      <div class="container">
+        <div class="section-head"><div><span class="eyebrow">Вопросы</span><h2>Начинать можно без идеальной подготовки.</h2></div><p>Короткие ответы на вопросы, которые часто возникают перед стартом.</p></div>
+        <div class="faq-list">
+          <details><summary>Нужен ли опыт программирования?</summary><p>Нет. Материал рассчитан на начинающих. Достаточно компьютера, браузера и готовности регулярно практиковаться.</p></details>
+          <details><summary>Можно ли учиться в своём темпе?</summary><p>Да. Удобно разбивать обучение на небольшие задачи и возвращаться к темам, которые требуют дополнительной практики.</p></details>
+          <details><summary>Что нужно для первого проекта?</summary><p>Выбрать простую идею, определить минимальный результат, написать код и проверить его в браузере или среде разработки.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section" id="contacts">
+      <div class="container contact-grid">
+        <div class="contact-copy"><span class="eyebrow">Следующий шаг</span><h2>Начни с малого. Продолжай уверенно.</h2><p>Оставь заявку, чтобы обозначить интересующее направление и получить примерный маршрут для старта.</p><div class="contact-points"><span>Подходит для начинающих</span><span>Понятные цели и небольшие проекты</span><span>Можно выбрать направление</span></div></div>
+        <form class="form-card" id="start-form">
+          <h3>Подобрать направление</h3><p>Заполни форму. Это демонстрационный макет без отправки данных на сервер.</p>
+          <div class="form-grid">
+            <div class="field"><label for="name">Имя</label><input id="name" name="name" type="text" placeholder="Как к тебе обращаться" required></div>
+            <div class="field"><label for="email">Электронная почта</label><input id="email" name="email" type="email" placeholder="name@example.com" required></div>
+            <div class="field full"><label for="direction">Интересующее направление</label><select id="direction" name="direction" required><option value="">Выбери направление</option><option>HTML и CSS</option><option>JavaScript</option><option>Python</option><option>Пока не определился</option></select></div>
+          </div>
+          <button class="button button-primary" type="submit">Показать подтверждение <span aria-hidden="true">→</span></button>
+          <p class="form-status" id="form-status" aria-live="polite"></p>
+          <p class="form-note">Данные не сохраняются и никуда не передаются.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <a class="brand" href="#home"><span class="brand-mark">&lt;/&gt;</span><span>code<span style="color:var(--lime)">start</span></span></a>
+      <span>Учебный проект по разработке лендинга с помощью ИИ</span>
+      <div class="footer-links"><a href="#about">О платформе</a><a href="#tracks">Направления</a><a href="#contacts">Контакты</a></div>
+    </div>
+  </footer>
+
+  <script>
+    const menuToggle = document.querySelector("#menu-toggle");
+    const navigation = document.querySelector("#site-navigation");
+
+    function setMenuState(open) {
+      navigation.classList.toggle("is-open", open);
+      menuToggle.setAttribute("aria-expanded", String(open));
+    }
+
+    menuToggle.addEventListener("click", () => {
+      setMenuState(!navigation.classList.contains("is-open"));
+    });
+
+    // Меню закрывается после выбора пункта навигации,
+    // а атрибут aria-expanded возвращается в состояние false.
+    document.querySelectorAll("#site-navigation a").forEach((link) => {
+      link.addEventListener("click", () => {
+        setMenuState(false);
+      });
+    });
+
+    const startForm = document.querySelector("#start-form");
+    const formStatus = document.querySelector("#form-status");
+
+    startForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!startForm.checkValidity()) {
+        // Обязательные поля не заполнены: убираем предыдущее сообщение об успехе,
+        // форму не очищаем и новое сообщение не показываем.
+        formStatus.textContent = "";
+        startForm.reportValidity();
+        return;
+      }
+      const name = document.querySelector("#name").value.trim();
+      formStatus.textContent = `Спасибо, ${name}! Форма работает в демонстрационном режиме. Данные не отправлены.`;
+      startForm.reset();
+    });
+  </script>
+</body>
+</html>
