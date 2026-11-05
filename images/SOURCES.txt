@@ -1,0 +1,2 @@
+china.jpg и flower.jpg: примеры изображений scikit-learn.
+grace_hopper.jpg: портрет Грейс Хоппер из примеров Matplotlib.
