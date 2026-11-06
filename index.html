@@ -129,6 +129,8 @@
     .mini-line { height: 6px; margin: 8px 0; border-radius: 20px; background: rgba(255,255,255,.16); }
     .mini-line.short { width: 52%; background: var(--lime); }
     .mini-line.mid { width: 76%; }
+    .project-photo { display: block; width: 100%; height: 220px; object-fit: cover; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; } }
     .project-copy { padding: 21px; }
     .project-type { color: var(--cyan); font-size: .73rem; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; }
     .project-copy h3 { margin: 7px 0 8px; }
@@ -332,9 +334,9 @@
           <p>Ниже приведены демонстрационные идеи учебных проектов. Их можно использовать как ориентир для собственной практики.</p>
         </div>
         <div class="project-grid">
-          <article class="card project-card"><div class="project-art"><div class="mini-browser"><div class="mini-line short"></div><div class="mini-line"></div><div class="mini-line mid"></div><div class="mini-line"></div></div></div><div class="project-copy"><span class="project-type">HTML + CSS</span><h3>Лендинг продукта</h3><p>Структура страницы, карточки, кнопки и адаптация под экран смартфона.</p></div></article>
-          <article class="card project-card"><div class="project-art" style="background:linear-gradient(135deg,rgba(98,234,213,.2),rgba(210,255,114,.13))"><div class="mini-browser"><div class="mini-line mid"></div><div class="mini-line short"></div><div class="mini-line"></div><div class="mini-line short"></div></div></div><div class="project-copy"><span class="project-type">JavaScript</span><h3>Трекер привычек</h3><p>Интерактивный список, события, состояние элементов и простая логика.</p></div></article>
-          <article class="card project-card"><div class="project-art" style="background:linear-gradient(135deg,rgba(255,189,134,.18),rgba(154,123,255,.18))"><div class="mini-browser"><div class="mini-line short"></div><div class="mini-line mid"></div><div class="mini-line mid"></div><div class="mini-line"></div></div></div><div class="project-copy"><span class="project-type">Python</span><h3>Помощник для задач</h3><p>Небольшая программа для обработки информации и автоматизации действий.</p></div></article>
+          <article class="card project-card"><img class="project-photo" src="assets/images/web-development.jpg" alt="Экран ноутбука с программным кодом" width="960" height="640" loading="lazy"><div class="project-copy"><span class="project-type">HTML + CSS</span><h3>Лендинг продукта</h3><p>Структура страницы, карточки, кнопки и адаптация под экран смартфона.</p></div></article>
+          <article class="card project-card"><img class="project-photo" src="assets/images/javascript-project.jpg" alt="Рабочее место разработчика с ноутбуком и монитором" width="960" height="640" loading="lazy"><div class="project-copy"><span class="project-type">JavaScript</span><h3>Трекер привычек</h3><p>Интерактивный список, события, состояние элементов и простая логика.</p></div></article>
+          <article class="card project-card"><img class="project-photo" src="assets/images/python-workspace.jpg" alt="Работа с кодом на ноутбуке" width="960" height="640" loading="lazy"><div class="project-copy"><span class="project-type">Python</span><h3>Помощник для задач</h3><p>Небольшая программа для обработки информации и автоматизации действий.</p></div></article>
         </div>
       </div>
     </section>
@@ -400,6 +402,18 @@
     const startForm = document.querySelector("#start-form");
     const formStatus = document.querySelector("#form-status");
 
+    startForm.addEventListener("input", () => {
+      document.querySelector("#name").setCustomValidity("");
+      formStatus.textContent = "";
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && navigation.classList.contains("is-open")) {
+        setMenuState(false);
+        menuToggle.focus();
+      }
+    });
+
     startForm.addEventListener("submit", (event) => {
       event.preventDefault();
       if (!startForm.checkValidity()) {
@@ -409,7 +423,14 @@
         startForm.reportValidity();
         return;
       }
-      const name = document.querySelector("#name").value.trim();
+      const nameInput = document.querySelector("#name");
+      const name = nameInput.value.trim();
+      if (!name) {
+        nameInput.setCustomValidity("Введите имя, а не только пробелы.");
+        nameInput.reportValidity();
+        formStatus.textContent = "";
+        return;
+      }
       formStatus.textContent = `Спасибо, ${name}! Форма работает в демонстрационном режиме. Данные не отправлены.`;
       startForm.reset();
     });
