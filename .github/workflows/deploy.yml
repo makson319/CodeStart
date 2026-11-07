@@ -1,4 +1,4 @@
-name: Deploy CodeStart
+name: Публикация сайта
 
 on:
   push:
@@ -27,10 +27,10 @@ jobs:
         with:
           node-version: '24'
 
-      - name: Check HTML
+      - name: Проверка HTML
         run: npx --yes htmlhint@1.9.2 index.html
 
-      - name: Prepare site
+      - name: Подготовка файлов
         run: |
           mkdir _site
           cp index.html style.css _site/
@@ -42,6 +42,6 @@ jobs:
         with:
           path: _site
 
-      - name: Deploy to GitHub Pages
+      - name: Публикация в GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
