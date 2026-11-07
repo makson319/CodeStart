@@ -6,11 +6,13 @@
 
 [Открыть сайт](https://makson319.github.io/CodeStart/)
 
-Файлы сайта:
+## Файлы сайта
 - `index.html` — главная страница;
 - `style.css` — оформление;
 - `assets/images` — фотографии.
 
 Для просмотра откройте `index.html` в браузере.
+
+## Публикация
 
 При изменениях в `main` GitHub Actions проверяет HTML и публикует сайт в GitHub Pages.
