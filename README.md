@@ -37,7 +37,7 @@
 - Закрытие меню по Escape с возвратом фокуса на кнопку.
 - [Слияние изменений с main — PR № 2](https://github.com/makson319/CodeStart/pull/2).
 - [Форк учебного внешнего репозитория Spoon-Knife](https://github.com/makson319/Spoon-Knife).
-- Публикация через GitHub Pages из ветви main, корневой каталог.
+- В ЛР5: публикация через GitHub Pages из ветви main, корневой каталог. В ЛР6 используется собственный workflow GitHub Actions.
 
 ## Проверка
 
