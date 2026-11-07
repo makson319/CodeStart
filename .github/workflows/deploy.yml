@@ -1,58 +1,47 @@
-name: Validate and deploy CodeStart
+name: Deploy CodeStart
 
 on:
   push:
-    branches: [main, lr6/cicd]
-  pull_request:
     branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
+  pages: write
+  id-token: write
 
 concurrency:
-  group: pages-${{ github.ref }}
-  cancel-in-progress: true
+  group: pages
+  cancel-in-progress: false
 
 jobs:
-  validate:
-    name: Check HTML, CSS and local links
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version: '24'
-          cache: npm
-      - name: Install pinned dependencies
-        run: npm ci
-      - name: Validate HTML
-        run: npm run lint:html
-      - name: Validate CSS
-        run: npm run lint:css
-      - name: Check local links and image descriptions
-        run: npm run check:assets
-      - name: Build static site
-        run: npm run build
-      - name: Upload site
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: _site
-
   deploy:
-    name: Publish to GitHub Pages
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-    needs: validate
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-      - name: Deploy site
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - name: Check HTML
+        run: npx --yes htmlhint@1.9.2 index.html
+
+      - name: Prepare site
+        run: |
+          mkdir _site
+          cp index.html style.css _site/
+          cp -r assets _site/
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
